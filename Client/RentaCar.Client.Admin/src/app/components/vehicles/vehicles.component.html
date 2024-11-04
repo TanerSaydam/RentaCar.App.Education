@@ -1,0 +1,71 @@
+<app-blank pageTitle="Araçlar">
+    <flexi-grid
+    [data]="data()"
+    [total]="total()"
+    [loading]="loading()"
+    [dataBinding]="true"
+    (dataStateChange)="dataStateChange($event)"
+    [showCaption]="true"
+    captionTitle="Araç Listesi"
+    [showIndex]="true"
+    [showCommandColumn]="true"
+    [commandColumnTemplate]="commandColumnTemplate"
+    [captionTemplate]="captionColumnTemplate"
+    >
+        <ng-template #captionColumnTemplate>
+            <flexi-button btnColor="primary" btnIcon="add" flexiTooltip title="Araç Ekle" (click)="createPopupVisible.set(true)"/>
+        </ng-template>
+        <flexi-grid-column title="Kapak Resmi">
+            <ng-template flexiGridCellTemplate let-item>
+                <img src="{{vehicleFileUrl()}}/images/{{item.coverImageUrl}}" width="100" height="100" style="object-fit: contain;">
+            </ng-template>
+        </flexi-grid-column>
+        <flexi-grid-column field="brand" title="Marka" />
+        <flexi-grid-column field="model" title="Model" />
+        <flexi-grid-column field="year" title="Yıl" />
+        <flexi-grid-column field="plate" title="Plaka" />
+        <flexi-grid-column field="dailyPrice" title="Günlük Ücret" />
+        <flexi-grid-column field="isActive" title="Aktif Mi?" filterType="boolean" [booleanData]="['Aktif', 'Pasif']" />
+
+        <ng-template #commandColumnTemplate let-item>
+            <flexi-button btnColor="primary" btnIcon="edit" flexiTooltip title="Güncelle"/>
+            <flexi-button btnColor="danger" btnIcon="delete" flexiTooltip title="Sil"/>
+        </ng-template>
+    </flexi-grid>
+</app-blank>
+
+<flexi-popup [isPopupVisible]="createPopupVisible()" popupTitle="Araç Ekle" (onSave)="create()">
+    <div class="form-group">
+        <label>Marka</label>
+        <input type="text" [(ngModel)]="createModel().brand" name="brand" class="form-control" autocomplete="off">
+    </div>
+
+    <div class="form-group mt-3">
+        <label>Model</label>
+        <input type="text" [(ngModel)]="createModel().model" name="model" class="form-control" autocomplete="off">
+    </div>
+
+    <div class="form-group mt-3">
+        <label>Year</label>
+        <select class="form-control" [(ngModel)]="createModel().year" name="year">
+            @for(year of years();track year){
+                <option [value]="+year">{{year}}</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group mt-3">
+        <label>Plaka</label>
+        <input type="text" [(ngModel)]="createModel().plate" name="plate" class="form-control" autocomplete="off">
+    </div>
+
+    <div class="form-group mt-3">
+        <label>Günlük Ücret</label>
+        <input type="text" mask="separator.2" thousandSeparator="." [(ngModel)]="createModel().dailyPrice" name="dailyPrice" class="form-control" autocomplete="off">
+    </div>
+
+    <div class="form-group mt-3">
+        <label>Araç Kapak Fotoğrafı</label>
+        <input type="file" (change)="getFile($event)" name="coverImageUrl" class="form-control">
+    </div>
+</flexi-popup>

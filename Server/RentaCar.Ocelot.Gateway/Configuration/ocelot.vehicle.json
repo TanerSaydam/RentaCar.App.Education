@@ -1,0 +1,11 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "ServiceName": "vehicle",
+      "UpstreamPathTemplate": "/vehicle-gate/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "SwaggerKey": "vehicle"
+    }
+  ]
+}

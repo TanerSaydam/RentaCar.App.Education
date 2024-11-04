@@ -1,0 +1,52 @@
+services:  
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04
+    container_name: mssql
+    environment:
+    - "ACCEPT_EULA=Y"
+    - "MSSQL_SA_PASSWORD=Udemy#123"
+    - "MSSQL_PID=Evaluation"
+    ports:
+    - 1433:1433
+    networks:
+    - rentacar_network
+  
+  ocelot.gateway:
+    image: ocealot.gateway:latest
+    container_name: ocelot.gateway
+    build:
+      context: .
+      dockerfile: RentaCar.Ocelot.Gateway/Dockerfile
+    ports:
+    - 5000:8080
+    networks:
+    - rentacar_network
+    volumes:
+    - ./RentaCar.Ocelot.Gateway/ocelot.json:/app/ocelot.json
+
+  vehicle.webapi:
+    image: vehicle.webapi:latest
+    build:
+      context: .
+      dockerfile: RentaCar.Vehicles/RentaCar.Vehicles.WebAPI/Dockerfile
+    ports:
+    - 5001:8080
+    container_name: vehicle.webapi
+    networks:
+    - rentacar_network
+    volumes:
+    - ./RentaCar.Vehicles/RentaCar.Vehicles.WebAPI/wwwroot:/app/wwwroot
+
+  jeager:
+    image: jaegertracing/all-in-one:latest
+    ports:
+    - 16686:16686
+    - 4318:4318
+    - 4317:4317
+    container_name: jeager
+    networks:
+    - rentacar_network
+
+networks:
+  rentacar_network:
+    driver: bridge

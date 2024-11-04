@@ -1,0 +1,17 @@
+{
+  "SwaggerEndPoints": [
+    {
+      "Key": "vehicle",
+      "Config": [
+        {
+          "Name": "Vehicle Web API",
+          "Version": "v1",
+          "Service": {
+            "Name": "vehicle",
+            "Path": "/swagger/v1/swagger.json"
+          }
+        }
+      ]
+    }
+  ]
+}
